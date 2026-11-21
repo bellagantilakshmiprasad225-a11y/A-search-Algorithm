@@ -1,219 +1,612 @@
-# A* Search Algorithm Visualizer – AI Pathfinding System
-### 3rd-Year B.Tech Computer Science & Engineering Mini-Project
-**Artificial Intelligence & Algorithm Design Laboratory**
+# A* Search Algorithm Visualizer
 
----
+<p align="center">
+  <strong>An interactive pathfinding laboratory for understanding informed and uninformed search algorithms.</strong>
+</p>
 
-## 📌 1. Project Overview
+![React](https://img.shields.io/badge/React-18-087ea4?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38bdf8?logo=tailwindcss&logoColor=white)
+![Vitest](https://img.shields.io/badge/Tests-Vitest-6e9f18?logo=vitest&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Educational%20Release-success)
 
-The **A* Search Algorithm Visualizer** is an interactive, production-grade web application built to visually demonstrate and empirically analyze informed search algorithms in Artificial Intelligence.
+## Table of Contents
 
-Designed specifically for academic demonstrations, university laboratory evaluations, and technical viva examinations, the system allows students and examiners to:
-- Draw and erase obstacles in real time with mouse/touch support.
-- Reposition start ($\mathbf{S}$) and goal ($\mathbf{G}$) nodes.
-- Watch **A\***, **Dijkstra’s Algorithm**, and **Breadth-First Search (BFS)** explore state spaces step-by-step.
-- Inspect the exact evaluation functions $f(n) = g(n) + h(n)$ on individual grid cells.
-- Compare algorithm optimality, node expansion counts, and execution times side-by-side using **Recharts**.
-- Export benchmark performance records directly to **CSV**.
-- Study textbook-grade theory, worked mathematical traces, and **15+ curated viva questions with model answers**.
+- [Project Overview](#project-overview)
+- [Problem Statement](#problem-statement)
+- [Vision and Objectives](#vision-and-objectives)
+- [Key Features](#key-features)
+- [Target Users and Use Cases](#target-users-and-use-cases)
+- [Implemented and Planned Features](#implemented-and-planned-features)
+- [System Architecture](#system-architecture)
+- [Application Workflow](#application-workflow)
+- [Technology Stack](#technology-stack)
+- [Project Folder Structure](#project-folder-structure)
+- [Important Files](#important-files)
+- [Frontend Architecture](#frontend-architecture)
+- [Algorithms and Data Flow](#algorithms-and-data-flow)
+- [API, Backend, Database, and Authentication](#api-backend-database-and-authentication)
+- [Persistence and Integrations](#persistence-and-integrations)
+- [Screenshots](#screenshots)
+- [Development Prerequisites](#development-prerequisites)
+- [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [Running the Project](#running-the-project)
+- [Build and Production Deployment](#build-and-production-deployment)
+- [Testing](#testing)
+- [Coding Standards and Conventions](#coding-standards-and-conventions)
+- [Debugging and Troubleshooting](#debugging-and-troubleshooting)
+- [Security and Performance](#security-and-performance)
+- [Versioning, Branching, and Releases](#versioning-branching-and-releases)
+- [Contribution Guidelines](#contribution-guidelines)
+- [Known Limitations](#known-limitations)
+- [Roadmap](#roadmap)
+- [FAQ](#faq)
+- [Changelog](#changelog)
+- [License](#license)
+- [Credits and Contact](#credits-and-contact)
+- [Final Summary](#final-summary)
 
-> **Zero Backend Requirement**: The application is 100% client-side, self-contained, requires no paid API keys or network calls at runtime, and persists user configurations locally via **LocalStorage**.
+## Project Overview
 
----
+The A* Search Algorithm Visualizer is a browser-based educational application for exploring graph-search behavior on a configurable two-dimensional grid. It demonstrates A* search, Dijkstra's algorithm, and breadth-first search (BFS), while providing playback controls, maze generation, algorithm metrics, benchmark charts, and a built-in learning guide.
 
-## 🛠️ 2. Technology Stack
+The project is implemented entirely in the browser. It has no application server, database, account system, external API dependency, or runtime network requirement.
 
-| Layer | Technology | Purpose |
+## Problem Statement
+
+The differences among search algorithms can be difficult to understand from formulas or pseudocode alone. Developers and students often need to see how an open set expands, how a closed set grows, how a path is reconstructed, and how heuristic guidance affects exploration.
+
+This application addresses that problem by combining:
+
+- An editable grid
+- Deterministic step-by-step execution
+- Live f(n), g(n), and h(n) values
+- Adjustable playback
+- Side-by-side benchmarks
+- CSV benchmark export
+- Academic explanations and viva-oriented questions
+
+## Vision and Objectives
+
+The project aims to make pathfinding algorithms understandable through direct experimentation. Its objectives are to:
+
+- Demonstrate how A* combines path cost and heuristic estimates.
+- Compare informed and uninformed search strategies under identical conditions.
+- Explain algorithmic optimality and heuristic admissibility.
+- Provide replayable, observable search execution.
+- Allow educators to demonstrate the project during laboratory or viva sessions.
+- Provide an approachable TypeScript codebase for algorithm and frontend studies.
+
+## Key Features
+
+- Interactive 18 x 32 grid with mouse and touch editing.
+- Start and goal repositioning.
+- Wall drawing and erasing.
+- Configurable grid size from 8 to 40 rows and 12 to 60 columns.
+- Random obstacle, recursive-division, and spiral maze generators.
+- Preset scenarios: open terrain, slalom zig-zag, bottleneck, and U-trap.
+- A* with Manhattan or Euclidean heuristics.
+- Dijkstra and BFS implementations.
+- Deterministic open, closed, and path event timelines.
+- Play, pause, reset, single-step, and timeline scrubbing.
+- Optional f/g/h score display.
+- Live path, visited-node, open-node, and path-length metrics.
+- Three-algorithm benchmark comparisons.
+- Recharts visualizations and CSV export.
+- Dark and light themes.
+- Local browser persistence for theme, saved grids, and academic credentials.
+- Built-in algorithm theory, pseudocode, worked examples, and viva questions.
+
+## Target Users and Use Cases
+
+| Audience | Typical use |
+|---|---|
+| Computer science students | Learn graph search and heuristic concepts |
+| Educators | Demonstrate traversal and optimality interactively |
+| Job candidates | Explain A* implementation and performance decisions |
+| Open-source contributors | Extend algorithms, layouts, and visualizations |
+| Academic evaluators | Review implementation, testing, and viva material |
+
+Example use cases include demonstrating why Manhattan distance is admissible on a four-directional grid, comparing node exploration, reconstructing a shortest path, or saving a custom maze for a later session.
+
+## Implemented and Planned Features
+
+| Status | Feature |
+|---|---|
+| Implemented | A*, Dijkstra, BFS, Manhattan and Euclidean heuristics |
+| Implemented | Interactive grid and deterministic playback |
+| Implemented | Maze presets and saved grid configurations |
+| Implemented | Benchmark charts and CSV export |
+| Implemented | Theme and student metadata persistence |
+| Implemented | Unit tests for queues, heuristics, paths, walls, and edge cases |
+| Planned | Weighted A* |
+| Planned | Diagonal movement and octile/chebyshev heuristics |
+| Planned | Dynamic obstacle replanning |
+| Planned | Additional automated UI and end-to-end tests |
+
+## System Architecture
+
+```mermaid
+flowchart LR
+    User[User] --> Shell[React Application Shell]
+    Shell --> Dashboard[Dashboard]
+    Shell --> Visualizer[Visualizer]
+    Shell --> Comparison[Benchmark Comparison]
+    Shell --> Learn[Learning Guide]
+    Shell --> ProjectInfo[Project Information]
+
+    Visualizer --> GridHook[useGrid]
+    Visualizer --> PlaybackHook[usePlayback]
+    GridHook --> GridHelpers[Grid Utilities]
+    GridHook --> MazeGenerators[Maze Generators]
+    PlaybackHook --> Timeline[Step Timeline]
+
+    Visualizer --> Dispatcher[Algorithm Dispatcher]
+    Comparison --> Dispatcher
+    Dispatcher --> AStar[A*]
+    Dispatcher --> Dijkstra[Dijkstra]
+    Dispatcher --> BFS[BFS]
+
+    AStar --> Heap[Min-Priority Queue]
+    AStar --> Heuristics[Heuristic Functions]
+
+    Comparison --> Charts[Recharts]
+    Comparison --> CSV[CSV Export]
+    Shell --> Storage[Browser LocalStorage]
+```
+
+This is a layered client application:
+
+- The React shell handles page routing and application-level UI.
+- Pages compose feature-specific components.
+- Hooks manage grid state, playback, themes, and browser persistence.
+- Algorithm modules are pure functions that operate on grid data.
+- Utilities generate grids and mazes or export benchmark records.
+- Static data supplies presets and academic learning content.
+
+## Application Workflow
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Grid as Grid State
+    participant Runner as Algorithm Runner
+    participant Playback as Playback Hook
+    participant View as Grid Component
+
+    User->>Grid: Draw walls or move start/goal
+    Grid-->>Runner: Grid and coordinates
+    User->>Runner: Select algorithm and visualize
+    Runner->>Runner: Search grid and create step events
+    Runner-->>Playback: AlgorithmResult and timeline
+    Playback->>View: Replay open, closed, and path events
+    View-->>User: Animated search and live metrics
+```
+
+Editing the grid increments a grid version. The visualizer invalidates the old result and reset playback state so stale path visualization cannot remain after a layout change.
+
+## End-to-End User Flow
+
+1. Open the dashboard and launch the visualizer.
+2. Add or erase walls, or move the start and goal.
+3. Select A*, Dijkstra, or BFS.
+4. For A*, choose Manhattan or Euclidean distance.
+5. Run the algorithm.
+6. Watch the event timeline animate or control it manually.
+7. Inspect path status and node statistics.
+8. Open the comparison page to benchmark algorithms on a preset.
+9. Export benchmark results as CSV.
+10. Open the learning page for theory and viva material.
+
+## Technology Stack
+
+| Area | Technology | Purpose |
 |---|---|---|
-| **Frontend Framework** | **React 18** + **TypeScript** (Strict Mode) | Component-driven architecture and compile-time type safety. |
-| **Build Tool** | **Vite 6** | Instant HMR development server and optimized Rollup production bundling. |
-| **Styling** | **Tailwind CSS** + PostCSS | Custom Dark Navy AI laboratory aesthetic with glassmorphism and radiant accents. |
-| **Icons** | **Lucide React** | Clean, accessible vector icons for all interactive states. |
-| **Animations** | **Framer Motion** + CSS Keyframes | Fluid page transitions and grid cell expansion micro-animations. |
-| **Data Visualization**| **Recharts** | Hardware-independent comparative bar charts for explored nodes and execution latency. |
-| **Testing** | **Vitest** | Automated unit tests validating algorithm equivalence, heuristics, and invariants. |
-| **Persistence** | **HTML5 LocalStorage API** | Seamless browser storage for theme preferences, custom grids, and student credentials. |
+| UI framework | React 18 | Component-based browser interface |
+| Language | TypeScript 5.7, strict mode | Type safety and maintainability |
+| Build and development server | Vite 6 | HMR and production bundling |
+| Styling | Tailwind CSS 3.4, PostCSS | Responsive and theme-aware UI |
+| Icons | Lucide React | Interface iconography |
+| Animation | Framer Motion | Page and UI transitions |
+| Charts | Recharts | Benchmark bar charts |
+| Testing | Vitest | Algorithm and utility unit tests |
+| Persistence | Browser LocalStorage | Local configuration and saved data |
 
----
+Utility dependencies include `clsx` and `tailwind-merge`.
 
-## 🧠 3. Mathematical Foundations of A* Search
+## Project Folder Structure
 
-### The Evaluation Function
-$$f(n) = g(n) + h(n)$$
-
-Where:
-- **$g(n)$**: The **exact known cost** from the starting node to node $n$. On our uniform-cost orthogonal grid, each move has a cost $c = 1$.
-- **$h(n)$**: The **heuristic estimate** of the cheapest path from node $n$ to the goal.
-- **$f(n)$**: The **estimated total cost** of the cheapest solution passing through node $n$.
-
-```
- [Start] ──(g(n): Exact Path Cost)──> [Node n] ┄┄(h(n): Heuristic Estimate)┄┄> [Goal]
- └──────────────────────────── f(n) = g(n) + h(n) ────────────────────────────┘
-```
-
-### Heuristic Admissibility & Consistency
-1. **Admissibility ($h(n) \le h^*(n)$)**:
-   A heuristic is *admissible* if it never overestimates the true cost to reach the goal. On a 4-directional grid, the **Manhattan Distance** ($L_1$ norm):
-   $$h(n) = |x_n - x_{\text{goal}}| + |y_n - y_{\text{goal}}|$$
-   is admissible and consistent, guaranteeing that A* finds an **optimal shortest path**.
-2. **Euclidean Distance ($L_2$ norm)**:
-   $$h(n) = \sqrt{(x_n - x_{\text{goal}})^2 + (y_n - y_{\text{goal}})^2}$$
-   is also admissible ($L_2 \le L_1$), but is *less informed* on 4-way orthogonal grids, leading to more node expansions.
-3. **When $h(n) = 0$**:
-   A* degenerates into **Dijkstra’s Algorithm** (Uniform Cost Search), expanding concentric rings radially without directional guidance.
-
----
-
-## 📊 4. Algorithm Comparison Matrix
-
-| Property | A* Search (Manhattan) | Dijkstra’s Algorithm | Breadth-First Search (BFS) |
-|---|---|---|---|
-| **Search Paradigm** | Informed (Heuristic Best-First) | Uniform Cost Search | Unweighted Blind Search |
-| **Guaranteed Shortest Path** | ✅ Yes (with admissible $h$) | ✅ Yes (non-negative costs) | ✅ Yes (unweighted graphs) |
-| **Evaluation Function** | $f(n) = g(n) + h(n)$ | $f(n) = g(n)$ | FIFO Queue Order |
-| **Time Complexity** | $O(b^d)$ worst-case; $O(d)$ best-case | $O((V + E) \log V)$ | $O(V + E)$ |
-| **Space Complexity** | $O(b^d)$ (Open & Closed sets) | $O(V)$ | $O(V)$ |
-| **Search Pattern** | Directional beam toward goal | Radiating concentric circles | Uniform wave outward |
-| **Typical Expansions** | **Minimal (~70% fewer nodes)** | Large | Large |
-
----
-
-## 📂 5. Project Directory Architecture
-
-```
-astar-pathfinding-visualizer/
-├── index.html                     # Entry HTML template with dark theme and typography
-├── package.json                   # Dependencies, scripts, and build configurations
-├── tsconfig.json                  # Strict TypeScript compiler options
-├── tailwind.config.js             # Custom Dark Navy & Neon Cyan theme palette
-├── postcss.config.js              # PostCSS Tailwind and Autoprefixer integration
-├── vite.config.ts                 # Vite server and React plugin setup
+```text
+A-Search-Algorithm/
 ├── src/
-│   ├── main.tsx                   # React root entry point
-│   ├── App.tsx                    # Shell layout, hash router & toast notifications
-│   ├── index.css                  # Global styles, scrollbars, and cell keyframe animations
-│   ├── types/
-│   │   └── index.ts               # Complete TypeScript interfaces (GridNode, StepEvent, AlgorithmResult)
 │   ├── algorithms/
-│   │   ├── astar.ts               # Pure A* implementation with binary heap priority queue
-│   │   ├── dijkstra.ts            # Pure Dijkstra uniform-cost implementation
-│   │   ├── bfs.ts                 # Pure BFS queue implementation
-│   │   ├── heuristics.ts          # Manhattan and Euclidean distance formulas
-│   │   ├── priorityQueue.ts       # O(log N) Min-Priority Queue with secondary tie-breaking
-│   │   ├── index.ts               # Dispatcher and unified algorithm runner
-│   │   └── __tests__/
-│   │       └── algorithms.test.ts # Vitest suite verifying algorithm optimality & invariants
-│   ├── hooks/
-│   │   ├── useGrid.ts             # Interactive grid state, drawing walls, maze generators
-│   │   ├── usePlayback.ts         # Deterministic timeline playback (play, pause, step forward/backward)
-│   │   ├── useLocalStorage.ts     # Generic typed LocalStorage synchronization
-│   │   └── useTheme.ts            # Dark/Light mode toggle and class switcher
-│   ├── components/
-│   │   ├── Cell.tsx               # Individual cell renderer with start, goal, wall & path states
-│   │   ├── Grid.tsx               # Responsive matrix with mouse and touch drag listeners
-│   │   ├── Controls.tsx           # Playback toolbar, speed presets, step scrubber
-│   │   ├── Legend.tsx             # Interactive color code legend and tool switcher
-│   │   ├── StatCard.tsx           # Metric cards for explored counts, path length, and latency
-│   │   ├── MazeControls.tsx       # Maze generator buttons and LocalStorage save/load modals
-│   │   ├── Navbar.tsx             # Top header with engine status, academic badge, theme toggle
-│   │   ├── Sidebar.tsx            # Left navigation sidebar with active page indicators
-│   │   ├── Toast.tsx              # Animated notification toasts
-│   │   └── Tooltip.tsx            # Accessible contextual tooltip component
-│   ├── pages/
-│   │   ├── Dashboard.tsx          # Executive dashboard with overview metrics and Recharts graphs
-│   │   ├── Visualizer.tsx         # Core interactive pathfinding laboratory canvas
-│   │   ├── Comparison.tsx         # 3-way head-to-head benchmark with Recharts and CSV export
-│   │   ├── Learn.tsx              # Theory guide, worked traces, flowchart, and 15+ viva FAQs
-│   │   └── ProjectInfo.tsx        # Technical specs, architecture principles & editable student credits
-│   ├── utils/
-│   │   ├── gridHelpers.ts         # Grid initialization, cloning, and safe wall toggling
-│   │   ├── mazeGenerators.ts      # Recursive division, random obstacles, and spiral labyrinth
-│   │   └── csvExport.ts           # Benchmark CSV report generator and file download trigger
-│   └── data/
-│       ├── presetMazes.ts         # Pre-configured test scenarios (Slalom, Bottleneck, U-Trap)
-│       └── learningContent.ts     # A* pseudocode, worked trace steps, and curated viva QA
+│   │   ├── __tests__/          # Vitest algorithm tests
+│   │   ├── astar.ts            # A* implementation
+│   │   ├── bfs.ts              # Breadth-first search
+│   │   ├── dijkstra.ts         # Dijkstra's algorithm
+│   │   ├── heuristics.ts       # Manhattan and Euclidean functions
+│   │   ├── priorityQueue.ts    # Binary min-heap
+│   │   └── index.ts            # Unified algorithm dispatcher
+│   ├── components/             # Grid, controls, navigation, and UI components
+│   ├── data/                   # Preset mazes and learning content
+│   ├── hooks/                  # Grid, playback, theme, and storage hooks
+│   ├── pages/                  # Dashboard and feature pages
+│   ├── utils/                  # Grid, maze, and CSV helpers
+│   ├── types/                  # Shared TypeScript types
+│   ├── App.tsx                 # Shell and hash-based routing
+│   ├── main.tsx                # React entry point
+│   └── index.css               # Global and Tailwind styles
+├── dist/                       # Generated production output
+├── index.html                  # Vite HTML entry
+├── package.json                # Scripts and dependencies
+├── package-lock.json           # Reproducible npm dependency versions
+├── tsconfig.json               # Strict application TypeScript configuration
+├── tsconfig.node.json          # Node-side TypeScript configuration
+├── vite.config.ts              # Vite React plugin and server settings
+├── tailwind.config.js          # Tailwind theme and content paths
+└── postcss.config.js           # PostCSS configuration
 ```
 
----
+## Important Files
 
-## 🚀 6. Installation & Execution Guide
+| File | Responsibility |
+|---|---|
+| `src/main.tsx` | Mounts React in strict mode |
+| `src/App.tsx` | Navigation shell, hash routing, theme, and toast state |
+| `src/pages/Visualizer.tsx` | Core grid editing and visualization experience |
+| `src/pages/Comparison.tsx` | Benchmark execution, chart data, and CSV export |
+| `src/pages/Learn.tsx` | Algorithm theory and viva guide |
+| `src/pages/ProjectInfo.tsx` | Technical specification and editable academic metadata |
+| `src/hooks/useGrid.ts` | Grid editing, resizing, mazes, and saved-grid operations |
+| `src/hooks/usePlayback.ts` | Timeline replay and playback controls |
+| `src/algorithms/astar.ts` | A* search and path reconstruction |
+| `src/algorithms/dijkstra.ts` | Uniform-cost search |
+| `src/algorithms/bfs.ts` | Queue-based breadth-first search |
+| `src/algorithms/priorityQueue.ts` | Binary min-heap implementation |
+| `src/types/index.ts` | Shared domain models and page types |
+| `src/utils/csvExport.ts` | Browser CSV download implementation |
+| `vite.config.ts` | Development server on port 3000 and React integration |
 
-### Prerequisites
-- **Node.js**: v18.0.0 or higher (v24.x tested and supported)
-- **npm**: v9.0.0 or higher
+## Frontend Architecture
 
-### Step 1: Install Dependencies
+The UI uses feature-focused React components and custom hooks. `App` acts as the application shell and uses URL hashes for navigation, allowing routes such as `#dashboard`, `#visualizer`, `#comparison`, `#learn`, and `#project-info` without a router dependency.
+
+The grid is represented as a two-dimensional array of `GridNode` objects. Each node contains coordinates, start/goal/wall flags, visualization state, and optional g, h, and f values.
+
+Major UI groups include:
+
+- Navigation: `Navbar` and `Sidebar`
+- Grid editing: `Grid`, `Cell`, `Legend`, and `MazeControls`
+- Playback: `Controls`
+- Metrics: `StatCard`
+- Notifications: `Toast`
+- Context help: `Tooltip`
+
+## Algorithms and Data Flow
+
+All movement uses unit-cost orthogonal steps: up, right, down, and left. Diagonal movement is not currently implemented.
+
+### A*
+
+A* prioritizes nodes using:
+
+```text
+f(n) = g(n) + h(n)
+```
+
+- `g(n)` is the known cost from the start.
+- `h(n)` is the estimated cost to the goal.
+- The implementation uses a binary min-heap with lower `h(n)` as a secondary tie-breaker.
+- Manhattan and Euclidean heuristics are both admissible under the project's movement model.
+- The parent map reconstructs the path after the goal is reached.
+
+### Dijkstra
+
+Dijkstra uses the exact cost `g(n)` as priority and is implemented without a heuristic.
+
+### BFS
+
+BFS uses a FIFO queue and is suitable for the project's unweighted, unit-cost grid.
+
+### Playback
+
+Each algorithm returns an ordered `StepEvent` stream. `usePlayback` applies events cumulatively to a pristine grid copy, enabling forward playback, backward stepping, reset, pause, and timeline scrubbing without mutating historical algorithm state.
+
+## API, Backend, Database, and Authentication
+
+There is no backend, REST or GraphQL API, database, user account system, authentication, or authorization layer in the current implementation. All search execution occurs in the browser.
+
+This means the project requires no server-side secrets and can be hosted as static files.
+
+## Persistence and Integrations
+
+The project uses browser LocalStorage through a typed `useLocalStorage` hook.
+
+| Key | Content |
+|---|---|
+| `pathfinder-theme` | Selected dark or light theme |
+| `pathfinder-saved-grids` | Saved dimensions, endpoints, and wall coordinates |
+| `pathfinder-student-info` | Editable academic presentation metadata |
+
+LocalStorage data is browser-specific and not synchronized across devices. Saved grids contain coordinates and walls, not the full visual step history.
+
+There are no third-party runtime APIs or external integrations.
+
+## Screenshots
+
+Screenshots are not committed in the current repository. Use the running application to capture current dashboard, visualizer, comparison, learning, and project-information views for project submissions.
+
+## Development Prerequisites
+
+- Node.js 18 or newer
+- npm 9 or newer
+- A modern browser with LocalStorage and ES2020 support
+- Git for source control
+
+The project was verified with Node.js and npm available in the current environment.
+
+## Installation
+
+Clone the repository and install dependencies:
+
 ```bash
+git clone https://github.com/jayaprakash72888-boop/A-search-algorithm.git
+cd A-search-algorithm
 npm install
 ```
 
-### Step 2: Start the Development Server
+## Environment Variables
+
+No environment variables are required. The application does not read `.env` files or `import.meta.env` values.
+
+## Running the Project
+
+Start the Vite development server:
+
 ```bash
 npm run dev
 ```
-Open your browser and navigate to:
-👉 **`http://localhost:3000/`**
 
-### Step 3: Run the Automated Unit Tests (Vitest)
-```bash
-npm test
-```
-*Executes all 10 unit tests comparing path lengths, priority queue invariants, and edge cases.*
+Vite is configured to open `http://localhost:3000/` and use port 3000.
 
-### Step 4: Verify the Production Bundle
+If port 3000 is occupied, Vite reports or chooses another available port. Use the URL printed in the terminal.
+
+## Build and Production Deployment
+
+Create a production build:
+
 ```bash
 npm run build
 ```
-*Compiles the TypeScript source with zero errors and outputs minified static assets to `/dist`.*
 
----
+The build command runs strict TypeScript project compilation and then Vite bundling. Output is written to `dist/`.
 
-## 🎓 7. Viva Defense & Demonstration Checklist
+Preview the generated build locally:
 
-Follow this workflow during your college mini-project examination:
+```bash
+npm run preview
+```
 
-1. **Demonstrate A\* End-to-End**:
-   - Navigate to **Visualizer** (`#visualizer`).
-   - Click **"Sample Demo"**. The app automatically loads the *Slalom Zig-Zag* maze and runs A* with Manhattan distance.
-   - Explain the color legend:
-     - 🟢 **Start Node** (Emerald flag)
-     - 🔴 **Goal Node** (Rose target)
-     - ⬛ **Wall Obstacles** (Dark blocks)
-     - 🔵 **Open Set** (Cyan glow - nodes on the frontier)
-     - 🟣 **Closed Set** (Indigo fill - evaluated nodes)
-     - 🟡 **Shortest Path** (Golden amber radiant trail)
-2. **Demonstrate Replay & Exact Step Backward**:
-   - Pause playback using the Pause button.
-   - Click **Step Backward** and **Step Forward** to show the examiner that steps are recorded deterministically in an event stream and can be inspected without state drift.
-   - Toggle **"f/g/h Scores"** to show actual numeric calculations on the cells.
-3. **Prove Optimality & Node Efficiency (Comparison Page)**:
-   - Navigate to **Comparison** (`#comparison`).
-   - Click **"Re-Run Benchmark"**.
-   - Point out to the examiner:
-     - **Path Length is identical across all three algorithms**: mathematically proving that A* preserves optimality.
-     - **A\* evaluates ~70% fewer nodes**: demonstrating how heuristic guidance prunes the search space.
-     - Explain why *explored node count* is the true hardware-independent metric, while *execution time (ms)* fluctuates with CPU scheduling.
-4. **Export CSV Live**:
-   - Click **"Export CSV"** to download the live benchmark report as evidence of empirical evaluation.
-5. **Answer Theory Questions**:
-   - Navigate to **Learn A\*** (`#learn`).
-   - Review Section 3 (Worked Example), Section 4 (Pseudocode), and Section 8 (15+ Viva FAQs) for questions on admissibility ($h(n) \le h^*(n)$) and consistency.
-6. **Showcase Student Metadata**:
-   - Navigate to **Project Info** (`#project-info`).
-   - Enter your name, roll number, and college name into the form; click **"Save Credentials"** to show LocalStorage persistence.
+Deploy the contents of `dist/` to any static host, such as:
 
----
+- GitHub Pages
+- Netlify
+- Vercel static deployment
+- Azure Static Web Apps
+- An ordinary web server or CDN
 
-## 🔮 8. Future Scope
+When deploying to a subdirectory, adjust Vite's `base` setting in `vite.config.ts` if assets are not rooted at `/`.
 
-1. **Weighted A\* Search ($\epsilon$-Admissible)**: Incorporating user-adjustable heuristic weighting $f(n) = g(n) + w \cdot h(n)$ to demonstrate the trade-off between search speed and path optimality.
-2. **8-Directional Diagonal Movement with Octile Distance**: Supporting diagonal transitions with corner-cutting prevention and Octile/Chebyshev heuristics.
-3. **Dynamic Moving Obstacles (D\* Lite)**: Visualizing incremental heuristic replanning when obstacles move in real-time.
-4. **Bi-Directional A\* Search**: Simultaneously expanding frontiers from both the Start and Goal nodes to meet in the middle.
+## Testing
 
----
+Run the unit test suite:
 
-## 📄 9. License
+```bash
+npm test
+```
 
-This project is developed for educational and academic submission purposes under the **MIT License**.
-Students are encouraged to modify, extend, and present it for academic evaluations.
+The test suite currently covers:
+
+- Binary min-heap ordering and tie-breaking
+- Manhattan and Euclidean calculations
+- Heuristic admissibility
+- Open-grid shortest paths
+- Wall-obstacle routing
+- Start-equals-goal handling
+- Unreachable goals
+- Start and goal wall protection
+
+Run strict TypeScript checking:
+
+```bash
+npm run lint
+```
+
+There is no end-to-end browser test suite or CI workflow in the repository at present.
+
+## Coding Standards and Conventions
+
+- Keep algorithm implementations pure where possible.
+- Preserve strict TypeScript types.
+- Use shared models from `src/types/index.ts`.
+- Reuse `createEmptyGrid`, `cloneGrid`, and `toggleWall` for grid mutations.
+- Keep React UI state in components or custom hooks.
+- Use named exports for modules that may be imported by multiple features.
+- Use accessible labels and visible states for interactive controls.
+- Avoid adding runtime network dependencies for core algorithm behavior.
+
+## Debugging and Troubleshooting
+
+### Use the browser developer tools
+
+Open DevTools and inspect the Console for LocalStorage read/write warnings and runtime errors.
+
+### Reset persisted state
+
+Clear the following LocalStorage keys in Application or Storage tools:
+
+- `pathfinder-theme`
+- `pathfinder-saved-grids`
+- `pathfinder-student-info`
+
+Alternatively, clear site data for the local application origin.
+
+### Replay is stale or not updating
+
+Edit or resize the grid and click **Visualize** again. Grid edits invalidate prior results and reset playback state.
+
+### Port 3000 is already in use
+
+Stop the existing process or allow Vite to choose another port. The terminal prints the active URL.
+
+### Production build fails
+
+Run:
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+Resolve any strict TypeScript diagnostics before deploying.
+
+## Security and Performance
+
+The application stores only non-sensitive presentation and grid data in LocalStorage. It does not transmit user data to an external service.
+
+Recommended security practices include:
+
+- Serve production assets over HTTPS.
+- Do not place credentials or private academic data in source-controlled files.
+- Treat LocalStorage data as editable client-side data, not authoritative storage.
+- Review dependencies with `npm audit` before release.
+
+Performance characteristics:
+
+- Heap insertion and removal are O(log n).
+- Algorithms operate in memory on a bounded grid.
+- Grid cloning supports deterministic timeline replay.
+- Framer Motion, Recharts, and Lucide are included in the client bundle.
+- The production build may report a large-chunk warning because charting, animation, and icon libraries are bundled together.
+
+## Versioning, Branching, and Releases
+
+The package version is `1.0.0`.
+
+Recommended conventions:
+
+- Use Semantic Versioning: `MAJOR.MINOR.PATCH`.
+- Use `main` for stable, reviewed source.
+- Use short-lived `feature/<topic>` branches for new work.
+- Use `fix/<topic>` branches for defects.
+- Tag releases as `v1.0.0`, `v1.1.0`, and so forth.
+
+No formal release automation or GitHub Actions workflow is present in the repository.
+
+## Contribution Guidelines
+
+1. Fork the repository and create a focused branch.
+2. Review the existing component and hook patterns.
+3. Add or update tests for algorithm and behavior changes.
+4. Run `npm run lint`, `npm test`, and `npm run build`.
+5. Keep commits and pull request descriptions focused on one change.
+6. Document any new page, setting, algorithm, or storage key in this README.
+7. Do not commit generated `node_modules` or local build output.
+
+## Known Limitations
+
+- Movement is restricted to four orthogonal directions.
+- No weighted, dynamic, bidirectional, or incremental replanning algorithms are implemented.
+- Euclidean distance is available for comparison but is less informed for this movement model.
+- Execution-time measurements can vary with browser scheduling and hardware.
+- The benchmark dashboard uses fixed comparison grids rather than arbitrary visualizer state.
+- LocalStorage is not a durable account-level storage mechanism.
+- There is no formal CI/CD workflow or license file in the repository.
+- The project has unit tests but no automated browser or end-to-end test suite.
+
+## Roadmap
+
+- Weighted A* with a configurable heuristic weight.
+- Diagonal and any-angle movement.
+- Bidirectional A* search.
+- Dynamic obstacle replanning such as D* Lite.
+- Shared, URL-based maze scenarios.
+- Algorithm complexity and memory metrics.
+- Component and end-to-end tests.
+- Automated build and test workflows.
+- Explicit project license and formal contribution documentation.
+
+## FAQ
+
+### Does A* always find the shortest path?
+
+Yes on this 4-directional grid with a unit-cost movement model when using a consistent and admissible heuristic. The implementation uses Manhattan and Euclidean heuristics, which meet those properties for this project.
+
+### Why is Manhattan the default?
+
+Manhattan distance exactly estimates obstacle-free movement distance for up, down, left, and right transitions.
+
+### Why might Euclidean expand more nodes?
+
+Euclidean distance underestimates more than Manhattan on a 4-directional grid, so A* receives less directional guidance and may explore more nodes.
+
+### Why might path lengths be identical?
+
+All three algorithms find the shortest path on an unweighted grid. They differ mainly in search strategy and number of nodes evaluated.
+
+### Is execution time a reliable performance benchmark?
+
+Node and path statistics are more reproducible than wall-clock execution time because browser timing varies by machine and scheduling.
+
+### Does the application need internet access?
+
+After dependencies are installed and static assets are loaded, core operation is local and does not call a network API.
+
+## Troubleshooting Guide
+
+| Symptom | Check | Resolution |
+|---|---|---|
+| Blank page | Browser Console and terminal | Verify the dev server is running and open the printed URL |
+| `npm install` fails | Node and npm versions | Upgrade Node.js and remove/reinstall `node_modules` if needed |
+| Vite uses a different port | Terminal output | Open the URL Vite prints |
+| Algorithm reports no path | Walls and endpoints | Remove walls separating the start from the goal |
+| Visualization does not update | Existing result | Edit the grid or click Visualize again |
+| Saved grids disappear | Different origin or browser | LocalStorage is origin- and browser-specific |
+| Production assets return 404 | Static host base path | Configure Vite `base` or hosting rewrite settings |
+
+## Changelog
+
+### 1.0.0
+
+- Initial educational release.
+- Added A*, Dijkstra, and BFS visualization.
+- Added grid editing, presets, saved grids, and playback controls.
+- Added algorithm comparison, charts, and CSV export.
+- Added learning, project information, and viva pages.
+- Added Vitest unit coverage.
+
+Future changes should be documented here or in a dedicated `CHANGELOG.md`.
+
+## License
+
+No license file or SPDX license declaration is currently included in the repository. Do not assume unrestricted reuse. Add a reviewed `LICENSE` file before publishing the project as open source.
+
+## Credits and Contact
+
+This project is maintained in the following repository:
+
+- Repository: https://github.com/jayaprakash72888-boop/A-search-algorithm
+- Owner: [jayaprakash72888-boop](https://github.com/jayaprakash72888-boop)
+
+Primary technologies and their upstream projects include React, TypeScript, Vite, Tailwind CSS, Framer Motion, Lucide, Recharts, and Vitest.
+
+For bugs or feature requests, use the repository's GitHub Issues page:
+
+- https://github.com/jayaprakash72888-boop/A-search-algorithm/issues
+
+## Final Project Summary
+
+The A* Search Algorithm Visualizer is a complete client-side educational pathfinding application for constructing grids, executing A*, Dijkstra, and BFS, replaying search timelines, benchmarking algorithm behavior, and studying the relevant theory. It is ready for local development and static deployment, with strict TypeScript, automated unit tests, browser-local persistence, no backend dependency, and a clear structure for future algorithm and UI extensions.
